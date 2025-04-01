@@ -1,0 +1,44 @@
+name: Migrate to CodeIgniter 4
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout koperasi
+      uses: actions/checkout@v2
+      with:
+        repository: muammarsaevi/koperasi
+        path: koperasi
+
+    - name: Checkout ci4
+      uses: actions/checkout@v2
+      with:
+        repository: muammarsaevi/ci4
+        path: ci4
+
+    - name: Copy files from ci4 to koperasi
+      run: |
+        cp -r ci4/app koperasi/
+        cp -r ci4/public koperasi/
+        cp -r ci4/system koperasi/
+        cp -r ci4/tests koperasi/
+        cp ci4/.env koperasi/
+        cp ci4/composer.json koperasi/
+        cp ci4/phpunit.xml.dist koperasi/
+        cp ci4/preload.php koperasi/
+        cp ci4/spark koperasi/
+
+    - name: Commit and push changes
+      run: |
+        cd koperasi
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add .
+        git commit -m 'Migrate to CodeIgniter 4'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
