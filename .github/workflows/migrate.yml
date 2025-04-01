@@ -26,7 +26,7 @@ jobs:
         cp -r ci4/public koperasi/
         cp -r ci4/system koperasi/
         cp -r ci4/tests koperasi/
-        cp ci4/.env koperasi/
+        if [ -f ci4/.env ]; then cp ci4/.env koperasi/; else cp ci4/.env.example koperasi/.env; fi
         cp ci4/composer.json koperasi/
         cp ci4/phpunit.xml.dist koperasi/
         cp ci4/preload.php koperasi/
